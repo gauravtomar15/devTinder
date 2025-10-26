@@ -1,14 +1,14 @@
 const express = require("express");
 const app = express();
 
-app.get("/",(req,res)=>{
-    res.send("hello from server!");
+app.get("/ab",(req,res)=>{
+    console.log(req.params);
+    res.send({first: "gaurav", last: "tomar"});
 });
-app.get("/test",(req,res)=>{
-    res.send("hello from  with test case!");
-});
-app.get("/hello",(req,res)=>{
-    res.send("hello hello hello!");
+
+app.get("/ab/c",(req,res)=>{
+    console.log(req.params);
+    res.send({first: "gaurav", last: "tomar", age: "21"});
 });
 
 

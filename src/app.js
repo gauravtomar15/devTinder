@@ -1,31 +1,30 @@
 const express = require("express");
+const connectDb = require("./config/database");
+const User = require("./models/user")
 const app = express();
 
-const {adminAuth,userAuth} = require("./middlewares/auth")
+app.post("/signUp", async(req , res)=>{
+    
+    const user = new User({
+        firstName: "Gaurav",
+        lastName: "Tomar",
+        email:"Gaurav@tomar.com",
+        password: "21",
+    }) ;
+   try {
+     await user.save();
+     res.send("user data updated sucessfully");
+   } catch (err) {
+     res.status(400).send("user fill wrong")
+   }
+   console.log("added the data")
+})
 
-app.use("/admin",adminAuth);
 
-app.get("/admin/getAllData",(req,res)=>{
-    console.log("data send");
-    res.send("send the data");
+connectDb().then(()=>{
+    console.log("db is connected");
+    app.listen(7777,()=>{console.log("server is ready")});
+}).catch((err)=>{
+    console.error("db is not connected")
 });
 
-app.get("/admin/deleteAllData",(req,res)=>{
-    console.log("data send");
-    res.send("delete the data");
-});
-
-
-app.get("/user", userAuth,(req,res)=>{
-    console.log("data send");
-    res.send("send the data from user")
-});
-app.get("/user/update", userAuth,(req,res)=>{
-    console.log("data send");
-    res.send("update the from user")
-});
-
-
-
-
-app.listen(7777,()=>{console.log("server is ready")});

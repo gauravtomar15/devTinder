@@ -3,17 +3,16 @@ const connectDb = require("./config/database");
 const User = require("./models/user")
 const app = express();
 
+
+app.use(express.json());
+
 app.post("/signUp", async(req , res)=>{
     
-    const user = new User({
-        firstName: "Gaurav",
-        lastName: "Tomar",
-        email:"Gaurav@tomar.com",
-        password: "21",
-    }) ;
+    const user = new User(req.body) ;
    try {
      await user.save();
-     res.send("user data updated sucessfully");
+     res.send("user added data successfully")
+     
    } catch (err) {
      res.status(400).send("user fill wrong")
    }

@@ -11,4 +11,6 @@ const isValidateData = (req)=>{
     }
 }
 
+
+
 module.exports = {isValidateData};

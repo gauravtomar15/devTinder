@@ -11,6 +11,17 @@ const isValidateData = (req)=>{
     }
 }
 
+const validateProfileEditData = (req)=>{
+    const allowedData= ["firstName", "lastName","skills","about"];
 
+    const isAllowedData =  Object.keys(req.body).every((field)=> allowedData.includes(field));
 
-module.exports = {isValidateData};
+    return isAllowedData;
+}
+
+const validatePassword = (req)=>{
+    const oldPassword = req.body;
+    
+}
+
+module.exports = {isValidateData ,validateProfileEditData};

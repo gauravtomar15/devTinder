@@ -2,7 +2,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 
-const userAuth = async (req,res,next)=>{
+const userAuth = async (req, res, next)=>{
+    console.log("🔐 userAuth middleware called");
  try {
    const {token} = req.cookies;
   if(!token){
@@ -22,6 +23,5 @@ const userAuth = async (req,res,next)=>{
  } catch (err) {
   res.status(400).send("ERROR: " + err.message)
  }
-
 };
 module.exports = {userAuth};

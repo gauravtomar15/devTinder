@@ -1,5 +1,6 @@
 
 const mongoose = require("mongoose");
+const user = require("./user")
 const connectionRequestSchema = new mongoose.Schema({
     fromName:{
         type: String,
@@ -10,7 +11,8 @@ const connectionRequestSchema = new mongoose.Schema({
     },
     fromUserId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: user
     },
     status: {
         type: String,

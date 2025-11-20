@@ -1,9 +1,10 @@
 const express = require("express");
 const requestRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
+const mongoose = require("mongoose");
+
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
-
 
 
 
@@ -13,6 +14,11 @@ requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
     const toUserId = req.params.toUserId;
     const status = req.params.status;
     const fromName = req.user.firstName;
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(toUserId)) {
+      return res.status(400).send("Invalid user ID format");
+    }
 
     const statusAllowed = ["interested", "rejected"];
     if (!statusAllowed.includes(status)) {
@@ -52,13 +58,18 @@ requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
 });
 
 requestRouter.post(
-  "/request/review/:status/:requestId",
+  "/request/:status/:requestId",
   userAuth,
   async (req, res) => {
     try {
       const loggedIn = req.user;
       const { status, requestId } = req.params;
       const allowedStatus = ["accepted", "rejected"];
+
+      // Validate ObjectId
+      if (!mongoose.Types.ObjectId.isValid(requestId)) {
+        return res.status(400).send("Invalid request ID format");
+      }
 
       if (!allowedStatus.includes(status)) {
         return res.status(400).send("status not valid");

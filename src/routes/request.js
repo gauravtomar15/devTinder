@@ -20,7 +20,7 @@ requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
       return res.status(400).send("Invalid user ID format");
     }
 
-    const statusAllowed = ["interested", "rejected"];
+    const statusAllowed = ["interested", "ignored"];
     if (!statusAllowed.includes(status)) {
       return res.status(400).send("status is not valid: " + status);
     }

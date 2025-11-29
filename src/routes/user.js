@@ -74,14 +74,13 @@ userRouter.get("/feed", userAuth, async (req,res)=>{
             { _id: {$nin: Array.from(hideUserFromFeed)}},
             { _id: {$ne: loggedInUser._id}}
         ]
-       }).select("firstName lastName about skills  ").skip(skip).limit(limit);
+       }).select("firstName lastName about skills ").skip(skip).limit(limit);
 
-     res.send(users);
-  
+     res.send(users); 
         
     } catch (err) {
         res.send("ERROR :" + err.message);
     }
-})
+});
 
 module.exports = userRouter

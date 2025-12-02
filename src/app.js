@@ -2,7 +2,7 @@ const express = require("express");
 const connectDb = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
-const cors = require("cors");    
+const cors = require("cors");
 
 
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use("/",user)
 
 
 connectDb()
-  .then(() => {
+ .then(() => {
     console.log("db is connected");
     app.listen(7777, () => {
       console.log("server is ready");

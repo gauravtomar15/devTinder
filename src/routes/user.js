@@ -28,6 +28,7 @@ userRouter.get("/user/request/received", userAuth, async (req ,res)=>{
   }
 });
 
+
 userRouter.get("/user/connections", userAuth, async (req, res)=>{
     try {
         const loggedIn = req.user;
@@ -49,6 +50,8 @@ userRouter.get("/user/connections", userAuth, async (req, res)=>{
       }
       return row.fromUserId
     });
+
+    console.log(data)
 
         res.json({data})
 

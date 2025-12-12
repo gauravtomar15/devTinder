@@ -12,7 +12,7 @@ const isValidateData = (req)=>{
 }
 
 const validateProfileEditData = (req)=>{
-    const allowedData= ["firstName", "lastName","skills","about","password","age" ,"photoUrl"];
+    const allowedData= ["firstName", "lastName","about","age" ,"photoUrl","gender"];
 
     const isAllowedData =  Object.keys(req.body).every((field)=> allowedData.includes(field));
 

@@ -14,6 +14,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
 
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
+  
     if (!validateProfileEditData(req)) {
       throw new Error("please enter valid requirement");
     }

@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
-
+const sendEmail = require("../utils/sendEmail")
 
 
 requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
@@ -46,6 +46,8 @@ requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
     });
    
     const data = await connectionRequest.save();
+    const email = await sendEmail.run("A New Friend request from " + req.user.firstName ,`${req.user.firstName} is ${status} in ${toUser.firstName}`,);
+
     res.json({
       message: `${req.user.firstName} is ${status} in ${toUser.firstName}`,
       data,

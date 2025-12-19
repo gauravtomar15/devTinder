@@ -1,12 +1,14 @@
 const dotenv = require("dotenv");
 dotenv.config({ path: ".env" });
 
+
 const express = require("express");
 const connectDb = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+require("./utils/cronjob")
 
 app.use(express.json());
 app.use(cookieParser());

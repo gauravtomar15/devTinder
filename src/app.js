@@ -21,11 +21,13 @@ const auth = require("./routes/auth");
 const profile = require("./routes/profile");
 const request = require("./routes/request");
 const user = require("./routes/user")
+const payment = require("./routes/payment")
 
 app.use("/",auth);
 app.use("/", profile)
 app.use("/", request)
 app.use("/",user)
+app.use("/",payment)
 
 
 connectDb()

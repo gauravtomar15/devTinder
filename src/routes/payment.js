@@ -49,7 +49,7 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
   console.log("Wenhook-Signature", webhookSignature);
   try {
     const isWebhook = validateWebhookSignature(
-      JSON.stringify(webhookBody),
+      JSON.stringify(req.body),
       webhookSignature,
       process.env.RAZORPAY_WEBHOOK_SECRET,
     );
@@ -60,7 +60,7 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 
     const paymentDetails = req.body.payload.payment.entity;
 
-    const payment = await Payment.findOne({ orderId: paymentDetails.orderId });
+    const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
     payment.status = paymentDetails.status;
     await payment.save();
     console.log("payment saved");

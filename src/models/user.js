@@ -2,52 +2,52 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const mongoose = require("mongoose");
-const validator = require("validator")
-const userSchema = mongoose.Schema({
+const validator = require("validator");
+const userSchema = mongoose.Schema(
+  {
     firstName: {
-        type:String,
-        required: true,
-        minLength: 4,
-        maxLength: 16
+      type: String,
+      required: true,
+      minLength: 4,
+      maxLength: 16,
     },
     lastName: {
-        type: String
+      type: String,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        validate: function(value){
-            if(!validator.isEmail(value)){
-                throw new Error("email not valid")
-            }
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      validate: function (value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("email not valid");
         }
-
+      },
     },
     password: {
-        type: String,
-        required: true,
-        minLength: 6
+      type: String,
+      required: true,
+      minLength: 6,
     },
-    gender:{
-        type: String,
-        validate: function(value){
-            if(!["male","female","others"].includes(value)){
-                throw new Error("gender not same")
-            }
+    gender: {
+      type: String,
+      validate: function (value) {
+        if (!["male", "female", "others"].includes(value)) {
+          throw new Error("gender not same");
         }
+      },
     },
     age: {
-        type: Number,
-        min: 18,
+      type: Number,
+      min: 18,
     },
     about: {
-    type: String,
-    default: "Hey there ! I'm Developer"
+      type: String,
+      default: "Hey there ! I'm Developer",
     },
-     photoUrl: {
+    photoUrl: {
       type: String,
       default: "https://geographyandyou.com/images/user-profile.png",
       validate(value) {
@@ -55,26 +55,35 @@ const userSchema = mongoose.Schema({
           throw new Error("Invalid Photo URL: " + value);
         }
       },
-   
     },
     skills: {
-        type:[String],
+      type: [String],
+    },
+    isPremium:{
+        type: Boolean,
+        default: false
+    },
+    membershipType:{
+        type: String
     }
-    
-},{
-timestamps: true}
+  },
+  {
+    timestamps: true,
+  },
 );
-userSchema.methods.getJwt= async function (){
-      const user = this;
-      const token = await jwt.sign({_id: user._id} , "DEV@TINDER$123", {expiresIn: "7d"});
-      return token;
+userSchema.methods.getJwt = async function () {
+  const user = this;
+  const token = await jwt.sign({ _id: user._id }, "DEV@TINDER$123", {
+    expiresIn: "7d",
+  });
+  return token;
 };
 
-userSchema.methods.validatePassword = async function(passwordByInput){
-    const user = this;
-    const passwordHash = user.password;
-    const isValidPassword = await bcrypt.compare(passwordByInput, passwordHash);
-    return isValidPassword;
-}
+userSchema.methods.validatePassword = async function (passwordByInput) {
+  const user = this;
+  const passwordHash = user.password;
+  const isValidPassword = await bcrypt.compare(passwordByInput, passwordHash);
+  return isValidPassword;
+};
 
-module.exports = mongoose.model("User" , userSchema);
+module.exports = mongoose.model("User", userSchema);

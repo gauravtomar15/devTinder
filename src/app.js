@@ -7,8 +7,10 @@ const connectDb = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require("http");
 
-require("./utils/cronjob")
+require("./utils/cronjob");
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -21,7 +23,9 @@ const auth = require("./routes/auth");
 const profile = require("./routes/profile");
 const request = require("./routes/request");
 const user = require("./routes/user")
-const payment = require("./routes/payment")
+const payment = require("./routes/payment");
+const initializeSocket = require("./utils/socket");
+
 
 app.use("/",auth);
 app.use("/", profile)
@@ -29,11 +33,15 @@ app.use("/", request)
 app.use("/",user)
 app.use("/",payment)
 
+const server = http.createServer(app);
+
+initializeSocket(server);
+console.log("db before")
 
 connectDb()
  .then(() => {
     console.log("db is connected");
-    app.listen(7777, () => {
+    server.listen(7777, () => {
       console.log("server is ready");
     });
   })

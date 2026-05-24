@@ -9,6 +9,10 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const http = require("http");
 
+// import { setServers } from 'node:dns/promises';
+const {setServers} = require('dns/promises');
+setServers(['1.1.1.1','8.8.8.8']);
+
 require("./utils/cronjob");
 
 

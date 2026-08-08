@@ -1,7 +1,6 @@
 const dotenv = require("dotenv");
 dotenv.config({ path: ".env" });
 
-
 const express = require("express");
 const connectDb = require("./config/database");
 const app = express();
@@ -10,41 +9,44 @@ const cors = require("cors");
 const http = require("http");
 
 // import { setServers } from 'node:dns/promises';
-const {setServers} = require('dns/promises');
-setServers(['1.1.1.1','8.8.8.8']);
+const { setServers } = require("dns/promises");
+setServers(["1.1.1.1", "8.8.8.8"]);
 
 require("./utils/cronjob");
 
+const path = require("path");
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://gauravdevconnect.netlify.app"],
+    credentials: true,
+  }),
+);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const auth = require("./routes/auth");
 const profile = require("./routes/profile");
 const request = require("./routes/request");
-const user = require("./routes/user")
+const user = require("./routes/user");
 const payment = require("./routes/payment");
 const initializeSocket = require("./utils/socket");
 const chatRouter = require("./routes/chat");
 
-
-app.use("/",auth);
-app.use("/", profile)
-app.use("/", request)
-app.use("/",user)
-app.use("/",payment)
-app.use("/", chatRouter)
+app.use("/", auth);
+app.use("/", profile);
+app.use("/", request);
+app.use("/", user);
+app.use("/", payment);
+app.use("/", chatRouter);
 const server = http.createServer(app);
 
 initializeSocket(server);
-console.log("db before")
+console.log("db before");
 
 connectDb()
- .then(() => {
+  .then(() => {
     console.log("db is connected");
     server.listen(7777, () => {
       console.log("server is ready");

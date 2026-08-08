@@ -13,7 +13,7 @@ authRouter.post("/signUp", async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
 
     const passwordHash = await bcrypt.hash(password, 10);
-   
+
     const user = new User({
       firstName,
       lastName,
@@ -22,46 +22,52 @@ authRouter.post("/signUp", async (req, res) => {
     });
     const savedUser = await user.save();
     const token = await user.getJwt();
-      res.cookie("token",token,{
-        expires: new Date(Date.now() + 8*3600000)
-      });
-      res.send(savedUser);
-    res.json({message:"user added data successfully",data: savedUser})
-    
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+    res.json({ message: "user added data successfully", data: savedUser });
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }
   console.log("added the data");
 });
 
-
-authRouter.post("/login", async (req, res)=>{
+authRouter.post("/login", async (req, res) => {
   try {
-    const {email,password} = req.body;
-    const user = await User.findOne({email: email});
-    if(!user){
-       throw new Error("Invalid Credentials");    
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new Error("Invalid Credentials");
     }
     const isValidPassword = await user.validatePassword(password);
-    if(isValidPassword){
+    if (isValidPassword) {
       const token = await user.getJwt();
-      res.cookie("token",token,{
-        expires: new Date(Date.now() + 8*3600000)
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000),
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
       });
       res.send(user);
-    }
-    else{
-      throw new Error("Invalid Credentials");    
+    } else {
+      throw new Error("Invalid Credentials");
     }
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }
 });
 
-authRouter.post("/logout" , async(req, res)=>{
+authRouter.post("/logout", async (req, res) => {
   res.cookie("token", null, {
-    expires: new Date(Date.now())});
+    expires: new Date(0),
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
   res.send("logout succesfull");
-})
+});
 
 module.exports = authRouter;

@@ -4,7 +4,9 @@ const { createMessage, buildRoomId, markMessagesAsDelivered, markMessagesAsRead,
 const initializeSocket = (server) => {
   const io = socket(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: ["http://localhost:5173",
+        "https://gauravdevconnect.netlify.app"
+      ],
       credentials: true,
     },
   });
